@@ -11,6 +11,7 @@ namespace EspañaJanUF2PR1
                 DIFF = "Elige un nivel de dificultad:\n1. Fácil\n2. Difícil\n3. Personalizado\n4. Aleatorio",
                 ERROR = "Valor incorrecto, vuelve a introducirlo.";
 
+            string names;
             int selection = 0, difficulty = 0, errorCount = 3, max, min;
             do
             {
