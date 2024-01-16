@@ -6,6 +6,9 @@ namespace M03_UF2_PR1_TestProject
         [TestMethod]
         public void TestMethod1()
         {
+            int num = 1, max = 1, min = 0;
+            bool expected = true;
+            Assert.AreEqual(expected, M03_UF2_PR1_ClassLibrary.HeroeVSMonstruoLibrary.InRange(num, max, min));
         }
     }
 }
