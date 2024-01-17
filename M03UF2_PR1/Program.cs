@@ -10,6 +10,7 @@ namespace EspañaJanUF2PR1
             const string INTRO = "Bienvenido a Héroes vs Monstruo. Qué quieres hacer?\n1. Empezar una nueva aventura\n0. Salir",
                 DIFF = "Elige un nivel de dificultad:\n1. Fácil\n2. Difícil\n3. Personalizado\n4. Aleatorio",
                 NAMES = "Introduce los nombres de tus héroes (separados por comas, no son necesarios espacios):",
+                HEROES = "Arquera: {0}. Bárbaro: {1}. Maga: {2}. Druida: {3}.",
                 ERROR = "Valor incorrecto, vuelve a introducirlo.", EXITMSG = "Muchas gracias por jugar Héroes VS Monstruo.";
 
             string names;
@@ -62,6 +63,7 @@ namespace EspañaJanUF2PR1
                 {
                     heroes[i] = names.Split(',')[i].Trim();
                 }
+                Console.WriteLine(HEROES, heroes[0], heroes[1], heroes[2], heroes[3]);
             }
             while (errorCount < 0);
             Console.WriteLine(EXITMSG);
