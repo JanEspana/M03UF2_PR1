@@ -13,13 +13,13 @@ namespace EspañaJanUF2PR1
                 HEROES = "Arquera: {0}. Bárbaro: {1}. Maga: {2}. Druida: {3}.",
                 CUSTOMHP = "Introduce la vida de {0}, la cual está en el siguiente rango: [{1}, {2}]",
                 CUSTOMATK = "Introduce el ataque de {0}, el cual está en el siguiente rango:  [{1}, {2}]",
-                CUSTOMDF = "Introduce la defensa de {0}, la cual está en el siguiente rango: [{1}, {2}]",
+                CUSTOMDF = "Introduce la reducción de daño de {0}, la cual está en el siguiente rango: [{1}, {2}]",
                 EXITMSG = "Muchas gracias por jugar Héroes VS Monstruo.";
 
             string names;
             string[] heroes = new string[4];
-            double selection = 0, difficulty = 0, errorCount = 3, max, min, hpMax, hpMin, atkMax, atkMin, dfMax, dfMin;
-            double[] hp = new double[3], atk = new double[3], df = new double[3],
+            double selection = 0, difficulty = 0, errorCount = 3, max, min;
+            double[] hp = new double[4], atk = new double[4], df = new double[4],
 
             maxHp = { 2000, 3750, 1500, 2500, 7000 }, minHp = { 1500, 3000, 1100, 2000, 1000 },
             maxAtk = { 300, 250, 400, 120, 400 }, minAtk = { 200, 150, 300, 70, 300 },
@@ -101,8 +101,24 @@ namespace EspañaJanUF2PR1
                             Console.WriteLine(CUSTOMDF, heroes[i], minDf[i], maxDf[i]);
                             df[i] = Convert.ToDouble(Console.ReadLine());
                         } while (!PR1Library.InRange(df[i], max = maxDf[i], min = minDf[i]));
+
                     }
                 }
+                else
+                {
+                    for (int i = 0; i < heroes.Length; i++)
+                    {
+                        hp[i] = PR1Library.RandomStats(maxHp[i], minHp[i]);
+                        atk[i] = PR1Library.RandomStats(maxAtk[i], minAtk[i]);
+                        df[i] = PR1Library.RandomStats(maxDf[i], minDf[i]);
+                    }
+                }
+
+                for (int i = 0; i < heroes.Length; i++)
+                {
+                    Console.WriteLine("{0}:\nVida: {1}\nAtaque: {2}\nReducción de daño: {3}", heroes[i], hp[i], atk[i], df[i]);
+                }
+
             }
             while (errorCount < 0);
             Console.WriteLine(EXITMSG);
