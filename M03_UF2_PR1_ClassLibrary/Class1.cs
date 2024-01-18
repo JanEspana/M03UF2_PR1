@@ -1,8 +1,10 @@
-﻿namespace M03_UF2_PR1_ClassLibrary
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace M03_UF2_PR1_ClassLibrary
 {
     public class PR1Library
     {
-        public static bool InRange(int num, int max, int min)
+        public static bool InRange(double num, double max, double min)
         {
             return num >= min && num <= max;
         }
@@ -17,14 +19,7 @@
                     commaCount++;
                 }
             }
-            if (commaCount >= 3)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return commaCount >= 3;
         }
     }
 }
