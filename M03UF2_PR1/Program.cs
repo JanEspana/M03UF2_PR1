@@ -14,11 +14,13 @@ namespace EspañaJanUF2PR1
                 CUSTOMHP = "Introduce la vida de {0}, la cual está en el siguiente rango: [{1}, {2}]",
                 CUSTOMATK = "Introduce el ataque de {0}, el cual está en el siguiente rango:  [{1}, {2}]",
                 CUSTOMDF = "Introduce la reducción de daño de {0}, la cual está en el siguiente rango: [{1}, {2}]",
-                EXITMSG = "Muchas gracias por jugar Héroes VS Monstruo.";
+                EXITMSG = "Muchas gracias por jugar Héroes VS Monstruo.",
+                BATTLE = "Es el turno de {0}.\n1. Atacar\n2. Defenderse\n3. Habilidad especial.";
 
             string names;
             string[] heroes = new string[4];
             double selection = 0, difficulty = 0, errorCount = 3, max, min;
+            int[] turn = new int[4];
             double[] hp = new double[4], atk = new double[4], df = new double[4],
 
             maxHp = { 2000, 3750, 1500, 2500, 7000 }, minHp = { 1500, 3000, 1100, 2000, 1000 },
@@ -114,9 +116,16 @@ namespace EspañaJanUF2PR1
                     }
                 }
 
+                
+
                 for (int i = 0; i < heroes.Length; i++)
                 {
                     Console.WriteLine("{0}:\nVida: {1}\nAtaque: {2}\nReducción de daño: {3}", heroes[i], hp[i], atk[i], df[i]);
+                }
+                turn = PR1Library.Turns(turn);
+                for (int i = 0; i < turn.Length; i++)
+                {
+                    Console.WriteLine(turn[i]);
                 }
 
             }
