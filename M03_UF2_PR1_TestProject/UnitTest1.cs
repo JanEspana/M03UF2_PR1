@@ -17,5 +17,11 @@ namespace M03_UF2_PR1_TestProject
             bool expected = true;
             Assert.AreEqual(expected, M03_UF2_PR1_ClassLibrary.PR1Library.NameCheck(names));
         }
+        public void RandomStatsTest()
+        {
+            Random rnd = new Random();
+            double max = 10, min = 0;
+            bool expected = true;
+        }
     }
 }
