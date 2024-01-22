@@ -44,9 +44,9 @@ namespace M03_UF2_PR1_ClassLibrary
             }
             return turnsRandom;
         }
-        public static double HeroAttack(double atk, double monsterHp, double monsterDf)
+        public static double Attack(double atk, double hp, double df)
         {
-            return monsterHp - atk + (atk * monsterDf / 100) > 0 ? monsterHp - atk + (atk * monsterDf / 100) : 0;
+            return hp - atk + (atk * df / 100) > 0 ? hp - atk + (atk * df / 100) : 0;
         }
         public static double[] Heal(double[] hp, double[] maxHp)
         {
@@ -62,6 +62,37 @@ namespace M03_UF2_PR1_ClassLibrary
                 }
             }
             return hp;
+        }
+        public static double[] BubbleSort(double[] hp)
+        {
+            for (int i = 0; i < hp.Length - 1; i++)
+            {
+                for (int j = 0; j < hp.Length - 1; j++)
+                {
+                    if (hp[j] < hp[j + 1])
+                    {
+                        double temp = hp[j];
+                        hp[j] = hp[j + 1];
+                        hp[j + 1] = temp;
+                    }
+                }
+            }
+            return hp;
+        }
+        public static string[] NameSort(string[] heroes, double[] auxHp, double[] hp)
+        {
+            string[] output = new string[4];
+            for (int i = 0; i < heroes.Length; i++)
+            {
+                for (int j = 0; j < heroes.Length; j++)
+                {
+                    if (auxHp[i] == hp[j])
+                    {
+                        output[i] = heroes[j];
+                    }
+                }
+            }
+            return output;
         }
     }
 }
