@@ -15,7 +15,7 @@ namespace EspañaJanUF2PR1
                 CUSTOMATK = "Introduce el ataque de {0}, el cual está en el siguiente rango:  [{1}, {2}]",
                 CUSTOMDF = "Introduce la reducción de daño de {0}, la cual está en el siguiente rango: [{1}, {2}]",
                 EXITMSG = "Muchas gracias por jugar Héroes VS Monstruo.",
-                TURN = "Turno {0}", HEROTURN = "Estadísticas de {0}:\nVida: {1}\nAtaque: {2}\nReducción de daño: {3}%\n",
+                TURN = "Turno {0}",
                 STATSHOW = "{0}:\nVida: {1}\nAtaque: {2}\nReducción de daño: {3}%\n",
                 TOOMANYERRORS = "Has cometido demasiados errores, esta estadística será la mínima cantidad posible.",
                 BATTLE = "Es el turno de {0}.\n1. Atacar\n2. Defenderse\n3. Habilidad especial.",
@@ -23,12 +23,18 @@ namespace EspañaJanUF2PR1
                 ATTACK = "{0} inflinge {1} puntos de daño al Monstruo, dejándolo con {2} puntos de vida.",
                 DEFFENSE = "{0} se defiende, duplicando su resistencia por este turno.",
                 SPECIAL = "{0} utiliza su habilidad especial!",
-                MONSTERATTACK = "¡El monstruo ataca!";
+                ARCHSPECIAL = "Durante 2 turnos, el monstruo no atacará.",
+                BARBSPECIAL = "Durante 2 turnos, el bárbaro es invencible.",
+                MAGESPECIAL = "¡La maga inflinge 3 veces el daño habitual! Vida restante del monstruo: {0}",
+                DRUIDSPECIAL = "El druida ha curado 500 puntos de vida a todos.",
+                MONSTERATTACK = "¡El monstruo ataca!",
+                FLINCH = "¡La arquera ha hecho retroceder al monstruo! Turnos restantes para el ataque: {0}",
+                LIFEORDER = "Vida restante de {0}: {1}";
 
             string names;
             bool resetTurn = false;
             int flinchAbility = 0, protectAbility = 0;
-            string[] heroes = new string[4];
+            string[] heroes = new string[4], auxHeroes = new string[4];
             double selection = 0, difficulty = 0, errorCount = 3, max, min;
             bool[] protect = new bool[4];
             int[] turn = new int[4], abilityCooldown = new int[4];
@@ -228,12 +234,9 @@ namespace EspañaJanUF2PR1
                                 resetTurn = false;
                                 Console.WriteLine(BATTLE, heroes[turn[i]]);
                                 selection = Convert.ToInt32(Console.ReadLine());
-                            } while (!PR1Library.InRange(selection, max, min));
-                            do
-                            {
                                 if (selection == 1)
                                 {
-                                    monster[0] = Math.Round(PR1Library.HeroAttack(atk[turn[i]], monster[0], monster[2]), 2);
+                                    monster[0] = Math.Round(PR1Library.Attack(atk[turn[i]], monster[0], monster[2]), 2);
                                     Console.WriteLine(ATTACK, heroes[turn[i]], atk[turn[i]], monster[0]);
                                 }
                                 else if (selection == 2)
@@ -248,18 +251,23 @@ namespace EspañaJanUF2PR1
                                         Console.WriteLine(SPECIAL, heroes[turn[i]]);
                                         if (turn[i] == 0)
                                         {
+                                            Console.WriteLine(ARCHSPECIAL);
                                             flinchAbility = 2;
                                         }
                                         else if (turn[i] == 1)
                                         {
+                                            Console.WriteLine(BARBSPECIAL);
                                             protectAbility = 2;
                                         }
                                         else if (turn[i] == 2)
                                         {
-                                            monster[0] = PR1Library.HeroAttack(atk[turn[i]] * 3, monster[0], monster[2]);
+                                            
+                                            monster[0] = PR1Library.Attack(atk[turn[i]] * 3, monster[0], monster[2]);
+                                            Console.WriteLine(MAGESPECIAL, monster[0]);
                                         }
                                         else
                                         {
+                                            Console.WriteLine(DRUIDSPECIAL);
                                             if (difficulty == 2)
                                             {
                                                 hp = PR1Library.Heal(hp, minHp);
@@ -273,20 +281,70 @@ namespace EspañaJanUF2PR1
                                     }
                                     else
                                     {
-                                        Console.Write(COOLDOWN, 5 - abilityCooldown[turn[i]], heroes[turn[i]]);
+                                        Console.Write(COOLDOWN, abilityCooldown[turn[i]], heroes[turn[i]]);
                                         resetTurn = true;
                                     }
                                 }
-                            } while (resetTurn);
+                            } while (!PR1Library.InRange(selection, max, min) || resetTurn);
                         }
                     }
                     Console.Write(MONSTERATTACK);
+                    
 
+                    double[] auxHp = hp;
+                    auxHp = PR1Library.BubbleSort(auxHp);
+                    auxHeroes = PR1Library.NameSort(heroes, auxHp, hp);
+                    if (flinchAbility == 0 || monster[0] > 0)
+                    {
+                        for (int i = 0; i < hp.Length; i++)
+                        {
+                            if (protect[i])
+                            {
+                                hp[i] = PR1Library.Attack(monster[1] / 2, hp[i], df[i]);
+                            }
+                            else if (protectAbility > 0)
+                            {
+                                Console.WriteLine("¡El bárbaro se ha protegido!");
+                                hp[i] = hp[i];
+                            }
+                            else
+                            {
+                                hp[i] = PR1Library.Attack(monster[1], hp[i], df[i]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        flinchAbility--;
+                        Console.WriteLine(FLINCH, flinchAbility);
+
+                    }
+                    for (int i = 0; i < auxHp.Length; i++)
+                    {
+                        if (auxHp[i] > 0)
+                        {
+                            Console.WriteLine(LIFEORDER, auxHeroes[i], auxHp[i]);
+                        }
+                    }
+                    for (int i = 0; i < abilityCooldown.Length; i++)
+                    {
+                        if (abilityCooldown[i] > 0)
+                        {
+                            abilityCooldown[i]--;
+                        }
+                    }
                 }
 
-
+                if (monster[0] <= 0)
+                {
+                    Console.WriteLine("¡Has ganado!");
+                }
+                else
+                {
+                    Console.WriteLine("Has perdido...");
+                }
             }
-            while (errorCount < 0);
+            while (errorCount < 0 || selection == 1);
             Console.WriteLine(EXITMSG);
         }
     }
