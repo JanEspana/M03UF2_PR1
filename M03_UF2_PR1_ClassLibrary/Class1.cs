@@ -22,7 +22,7 @@ namespace M03_UF2_PR1_ClassLibrary
             }
             return commaCount >= 3;
         }
-        public static double RandomStats (double max, double min)
+        public static double Random (double max, double min)
         {
             Random rnd = new Random();
             return (double)rnd.Next(Convert.ToInt32(min), Convert.ToInt32(max) + 1);

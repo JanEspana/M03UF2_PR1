@@ -21,11 +21,11 @@ namespace M03_UF2_PR1_TestProject
         //por lo que no puedo hacer un test para comprobar si es correcto.
 
         [TestMethod]
-        public void HeroAttackTest()
+        public void AttackTest()
         {
             double atk = 120, monsterHp = 3000, monsterDf = 15;
             double expected = 2898;
-            Assert.AreEqual(expected, M03_UF2_PR1_ClassLibrary.PR1Library.HeroAttack(atk, monsterHp, monsterDf));
+            Assert.AreEqual(expected, M03_UF2_PR1_ClassLibrary.PR1Library.Attack(atk, monsterHp, monsterDf));
         }
     }
 }
