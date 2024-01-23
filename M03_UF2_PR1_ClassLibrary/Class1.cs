@@ -56,6 +56,10 @@ namespace M03_UF2_PR1_ClassLibrary
                 {
                     hp[i] = maxHp[i];
                 }
+                else if (hp[i] <= 0)
+                {
+                    hp[i] = 0;
+                }
                 else
                 {
                     hp[i] = hp[i] + 500;
