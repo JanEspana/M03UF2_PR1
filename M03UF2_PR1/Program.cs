@@ -18,7 +18,7 @@ namespace EspañaJanUF2PR1
                 TURN = "Turno {0}",
                 STATSHOW = "{0}:\nVida: {1}\nAtaque: {2}\nReducción de daño: {3}%\n",
                 TOOMANYERRORS = "Has cometido demasiados errores, esta estadística será la mínima cantidad posible.",
-                BATTLE = "Es el turno de {0}.\n1. Atacar\n2. Defenderse\n3. Habilidad especial.",
+                BATTLE = "Es el turno de {0}.\n1. Atacar\n2. Defenderse\n3. Habilidad especial.\n",
                 COOLDOWN = "Aún quedan {0} turnos para que {1} pueda usar su habilidad especial.",
                 ATTACK = "{0} inflinge {1} puntos de daño al Monstruo, dejándolo con {2} puntos de vida.",
                 DEFFENSE = "{0} se defiende, duplicando su resistencia por este turno.",
@@ -29,7 +29,10 @@ namespace EspañaJanUF2PR1
                 DRUIDSPECIAL = "El druida ha curado 500 puntos de vida a todos.",
                 MONSTERATTACK = "¡El monstruo ataca!",
                 FLINCH = "¡La arquera ha hecho retroceder al monstruo! Turnos restantes para el ataque: {0}",
-                LIFEORDER = "Vida restante de {0}: {1}";
+                LIFEORDER = "Vida restante de {0}: {1}",
+                CRIT = "¡Ataque crítico!",
+                FAIL = "El ataque ha fallado.",
+                BATTLEERROR = "Has cometido demasiados errores. Se pasa el turno del jugador.";
 
             string names;
             bool resetTurn = false;
@@ -164,7 +167,7 @@ namespace EspañaJanUF2PR1
                     do
                     {
                         Console.WriteLine(CUSTOMHP, "el monstruo", minHp[minHp.Length - 1], maxHp[maxHp.Length - 1]);
-                        monster[0] = PR1Library.RandomStats(maxHp[maxHp.Length - 1], minHp[minHp.Length - 1]);
+                        monster[0] = PR1Library.Random(maxHp[maxHp.Length - 1], minHp[minHp.Length - 1]);
                     } while (!PR1Library.InRange(monster[0], max = maxHp[maxHp.Length - 1], min = minHp[minHp.Length - 1]) && errorCount > 0);
                     if (errorCount == 0)
                     {
@@ -175,7 +178,7 @@ namespace EspañaJanUF2PR1
                     do
                     {
                         Console.WriteLine(CUSTOMATK, "el monstruo", minAtk[minAtk.Length - 1], maxAtk[maxAtk.Length - 1]);
-                        monster[1] = PR1Library.RandomStats(maxAtk[maxAtk.Length - 1], minAtk[minAtk.Length - 1]);
+                        monster[1] = PR1Library.Random(maxAtk[maxAtk.Length - 1], minAtk[minAtk.Length - 1]);
                     } while (!PR1Library.InRange(monster[1], max = maxAtk[maxAtk.Length - 1], min = minAtk[minAtk.Length - 1]) && errorCount > 0);
                     if (errorCount == 0)
                     {
@@ -186,7 +189,7 @@ namespace EspañaJanUF2PR1
                     do
                     {
                         Console.WriteLine(CUSTOMDF, "el monstruo", minDf[minDf.Length - 1], maxDf[maxDf.Length - 1]);
-                        monster[2] = PR1Library.RandomStats(maxDf[maxDf.Length - 1], minDf[minDf.Length - 1]);
+                        monster[2] = PR1Library.Random(maxDf[maxDf.Length - 1], minDf[minDf.Length - 1]);
                     } while (!PR1Library.InRange(monster[2], max = maxDf[maxDf.Length - 1], min = minDf[minDf.Length - 1]) && errorCount > 0);
                     if (errorCount == 0)
                     {
@@ -197,14 +200,14 @@ namespace EspañaJanUF2PR1
                 else
                 {
                     for (int i = 0; i < heroes.Length; i++)
-                    {
-                        hp[i] = PR1Library.RandomStats(maxHp[i], minHp[i]);
-                        atk[i] = PR1Library.RandomStats(maxAtk[i], minAtk[i]);
-                        df[i] = PR1Library.RandomStats(maxDf[i], minDf[i]);
+                    {   
+                        hp[i] = PR1Library.Random(maxHp[i], minHp[i]);
+                        atk[i] = PR1Library.Random(maxAtk[i], minAtk[i]);
+                        df[i] = PR1Library.Random(maxDf[i], minDf[i]);
                     }
-                    monster[0] = PR1Library.RandomStats(maxHp[maxHp.Length - 1], minHp[minHp.Length - 1]);
-                    monster[1] = PR1Library.RandomStats(maxAtk[maxAtk.Length - 1], minAtk[minAtk.Length - 1]);
-                    monster[2] = PR1Library.RandomStats(maxDf[maxDf.Length - 1], minDf[minDf.Length - 1]);
+                    monster[0] = PR1Library.Random(maxHp[maxHp.Length - 1], minHp[minHp.Length - 1]);
+                    monster[1] = PR1Library.Random(maxAtk[maxAtk.Length - 1], minAtk[minAtk.Length - 1]);
+                    monster[2] = PR1Library.Random(maxDf[maxDf.Length - 1], minDf[minDf.Length - 1]);
                 }
 
                 for (int i = 0; i < heroes.Length; i++)
@@ -229,6 +232,7 @@ namespace EspañaJanUF2PR1
                         if (hp[turn[i]] > 0)
                         {
                             Console.WriteLine();
+                            errorCount = 3;
                             do
                             {
                                 resetTurn = false;
@@ -236,15 +240,28 @@ namespace EspañaJanUF2PR1
                                 selection = Convert.ToInt32(Console.ReadLine());
                                 if (selection == 1)
                                 {
-                                    monster[0] = Math.Round(PR1Library.Attack(atk[turn[i]], monster[0], monster[2]), 2);
-                                    Console.WriteLine(ATTACK, heroes[turn[i]], atk[turn[i]], monster[0]);
+                                    if (PR1Library.Random(max = 10, min = 1) == 1)
+                                    {
+                                        Console.WriteLine(CRIT);
+                                        monster[0] = Math.Round(PR1Library.Attack(atk[turn[i]], monster[0], monster[2]), 2);
+                                        Console.WriteLine(ATTACK, heroes[turn[i]], atk[turn[i]], monster[0]);
+                                    }
+                                    else if (PR1Library.Random(max = 20, min = 1) == 1)
+                                    {
+                                        Console.WriteLine(FAIL);
+                                    }
+                                    else
+                                    {
+                                        monster[0] = Math.Round(PR1Library.Attack(atk[turn[i]], monster[0], monster[2]), 2);
+                                        Console.WriteLine(ATTACK, heroes[turn[i]], atk[turn[i]], monster[0]);
+                                    }
                                 }
                                 else if (selection == 2)
                                 {
                                     protect[turn[i]] = true;
                                     Console.WriteLine(DEFFENSE, heroes[turn[i]]);
                                 }
-                                else
+                                else if (selection == 3)
                                 {
                                     if (abilityCooldown[turn[i]] == 0)
                                     {
@@ -285,11 +302,20 @@ namespace EspañaJanUF2PR1
                                         resetTurn = true;
                                     }
                                 }
-                            } while (!PR1Library.InRange(selection, max, min) || resetTurn);
+                                else
+                                {
+                                    
+                                    errorCount--;
+                                    if (errorCount == 0)
+                                    {
+                                        Console.WriteLine(BATTLEERROR);
+                                    }
+                                }
+                            } while (!PR1Library.InRange(selection, max, min) && (errorCount > 0) || resetTurn);
                         }
                     }
-                    Console.Write(MONSTERATTACK);
-                    
+
+                    Console.WriteLine(MONSTERATTACK);
 
                     double[] auxHp = hp;
                     auxHp = PR1Library.BubbleSort(auxHp);
