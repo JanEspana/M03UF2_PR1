@@ -1,4 +1,4 @@
-![image](https://github.com/JanEspana/M03UF2_PR1/assets/147418240/cab133ad-51b8-4dd6-b82b-ff4159cdc321)# M03UF2_PR1
+# M03UF2_PR1
 
 (Aparece más de un autor del repositorio, pero es por problemas con la cuenta de GitHub cuando hubo cambio de ordenadores)
 
